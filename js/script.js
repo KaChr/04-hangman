@@ -71,20 +71,20 @@ function getImg() {
 getImg();
 
 
-function message() {
+// function message() {
     
-      document.getElementById('message');
+//       document.getElementById('message');
     
-    if (/* Ord löst */) {
+//     if (/* Ord löst */) {
 
-      return 'Snyggt jobbat, du löste ordet!';
+//       return 'Snyggt jobbat, du löste ordet!';
 
-    } else (/* Olöst ord */) {
+//     } else (/* Olöst ord */) {
 
-      return 'Du försökte i alla fall :('
+//       return 'Du försökte i alla fall :('
 
-    }
-  }
+//     }
+//   }
 
 
 // Funktion som körs då hela webbsidan är inladdad, dvs då all HTML-kod är utförd
