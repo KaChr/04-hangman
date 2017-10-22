@@ -1,10 +1,10 @@
 // Globala variabler
 
-var wordList = ['björk', 'gröt', 'broms', 'yxa', 'monster', 'flagga'];
+var wordList = ['BJÖRK', 'GRÖT', 'BROMS', 'YXA', 'MOSTER', 'FLAGGA'];
 var selectedWord = wordList[Math.floor(Math.random() * wordList.length)];
 var letterBoxes; //Rutorna där bokstäverna ska stå
-var hangmanImg; //Bild som kommer vid fel svar
-var hangmanImgNr; // Vilken av bilderna som kommer upp beroende på hur många fel du gjort
+var hangmanImg = document.getElementById('hangman');  //Bild som kommer vid fel svar
+var hangmanImgNr = 0;
 var msgElem; // Ger meddelande när spelet är över
 var startGameBtn = document.getElementById('startGameBtn'); // Knappen du startar spelet med
 var letterButtons = document.querySelectorAll('#letterButtons > li > button');
@@ -12,39 +12,79 @@ var startTime; // Mäter tiden
 
 
 function addLetterListeners() {
+
     for (var i = 0; i < letterButtons.length; i++){
+
       letterButtons[i].addEventListener('click', letterWasClicked);
     }
 }  
     
-    
+
 function letterWasClicked() {
     
     const letterThatWasClicked = this.value;
     this.disabled = true;
     
-    console.log(letterThatWasClicked);
+
+    if (selectedWord.indexOf(letterThatWasClicked) !== -1) {
+        
+        for (var j = 0; j < selectedWord.length; j++) {
+            
+            if(letterThatWasClicked === selectedWord[j]) {
+                
+                 letterBoxes[j].textContent = letterThatWasClicked;
+                
+            }
+
+         }
+    } else {
+        hangmanImgNr++;
+        getImg();
+    }
+
 }
 addLetterListeners();
+letterWasClicked();
 
 
 function getLetterBoxes() {
         
     let box;
     
-    box= ""
+    box= '';
     
     for (var j = 0; j < selectedWord.length; j++) {
     
         box += '<input>&nbsp;</input>';
-      
+     
     }
     document.getElementById('letterBoxes').innerHTML = box;
     letterBoxes = document.getElementById('letterBoxes').getElementsByTagName('input');
 }
-    console.log(getLetterBoxes);
-    console.log(selectedWord);
 getLetterBoxes();
+
+
+function getImg() {
+
+    hangmanImg.src='images/h' + hangmanImgNr + '.png';
+}
+getImg();
+
+
+function message() {
+    
+      document.getElementById('message');
+    
+    if (/* Ord löst */) {
+
+      return 'Snyggt jobbat, du löste ordet!';
+
+    } else (/* Olöst ord */) {
+
+      return 'Du försökte i alla fall :('
+
+    }
+  }
 
 
 // Funktion som körs då hela webbsidan är inladdad, dvs då all HTML-kod är utförd
