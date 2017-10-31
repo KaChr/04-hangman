@@ -1,50 +1,84 @@
 // Globala variabler
 
 var wordList = ['BJÖRK', 'GRÖT', 'BROMS', 'YXA', 'MOSTER', 'FLAGGA'];
-var selectedWord = wordList[Math.floor(Math.random() * wordList.length)];
+var selectedWord = null;
 var letterBoxes; //Rutorna där bokstäverna ska stå
 var hangmanImg = document.getElementById('hangman');  //Bild som kommer vid fel svar
 var hangmanImgNr = 0;
-var msgElem; // Ger meddelande när spelet är över
+var correctGuesses = 0;
+var msgElem = document.querySelector('#message > p'); // Ger meddelande när spelet är över
 var startGameBtn = document.getElementById('startGameBtn'); // Knappen du startar spelet med
 var letterButtons = document.querySelectorAll('#letterButtons > li > button');
-var startTime; // Mäter tiden
 
+startGameBtn.addEventListener('click', startGame);
+
+function startGame() {
+    reset();
+    getRandomWord();
+    addLetterListeners();
+    getLetterBoxes();
+    getImg();
+}
+
+function reset() {
+    hangmanImgNr = 0;
+    correctGuesses = 0;
+    msgElem.textContent = '';
+    if (letterButtons.length > 0) {
+        letterButtons.forEach(function(letterButton) {
+            letterButton.disabled = '';
+        });
+    }
+}
+
+function getRandomWord() {
+    selectedWord = wordList[Math.floor(Math.random() * wordList.length)];
+}
 
 function addLetterListeners() {
-
     for (var i = 0; i < letterButtons.length; i++){
-
       letterButtons[i].addEventListener('click', letterWasClicked);
     }
 }  
-    
 
 function letterWasClicked() {
     
     const letterThatWasClicked = this.value;
-    this.disabled = true;
+    this.disabled = 'disabled';
     
 
     if (selectedWord.indexOf(letterThatWasClicked) !== -1) {
         
         for (var j = 0; j < selectedWord.length; j++) {
             
-            if(letterThatWasClicked === selectedWord[j]) {
+            if(letterThatWasClicked === selectedWord.charAt(j)) {
                 
-                 letterBoxes[j].textContent = letterThatWasClicked;
-                
+                 letterBoxes[j].value = letterThatWasClicked;
+                 
+                 correctGuesses++;
             }
 
-         }
+        }
     } else {
         hangmanImgNr++;
         getImg();
     }
+     
+    if (hangmanImgNr === 6) {
+       msgElem.innerHTML = 'Du försökte i alla fall :(';
+    
+        letterButtons.forEach(function(letterButton) {
+            letterButton.disabled = 'disabled';
+        });
+    } 
+    if (correctGuesses === selectedWord.length) {
+        msgElem.innerHTML = 'Snyggt jobbat! Du löste ordet! :)';
 
+        letterButtons.forEach(function(letterButton) {
+            letterButton.disabled = 'disabled';
+        });    
+    }
 }
-addLetterListeners();
-letterWasClicked();
 
 
 function getLetterBoxes() {
@@ -61,30 +95,13 @@ function getLetterBoxes() {
     document.getElementById('letterBoxes').innerHTML = box;
     letterBoxes = document.getElementById('letterBoxes').getElementsByTagName('input');
 }
-getLetterBoxes();
 
 
 function getImg() {
 
     hangmanImg.src='images/h' + hangmanImgNr + '.png';
 }
-getImg();
 
-
-// function message() {
-    
-//       document.getElementById('message');
-    
-//     if (/* Ord löst */) {
-
-//       return 'Snyggt jobbat, du löste ordet!';
-
-//     } else (/* Olöst ord */) {
-
-//       return 'Du försökte i alla fall :('
-
-//     }
-//   }
 
 
 // Funktion som körs då hela webbsidan är inladdad, dvs då all HTML-kod är utförd
